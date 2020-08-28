@@ -1,8 +1,6 @@
 package logrusly
 
 import (
-	"strings"
-
 	"github.com/segmentio/go-loggly"
 	"github.com/sirupsen/logrus"
 )
