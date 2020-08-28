@@ -58,15 +58,15 @@ func (hook *LogglyHook) Tag(tags string) {
 
 // Fire sends the event to Loggly
 func (hook *LogglyHook) Fire(entry *logrus.Entry) error {
-	data := make(logrus.Fields, len(entry.Data))
+	meta := make(logrus.Fields, len(entry.Data))
 	for k, v := range entry.Data {
 		switch v := v.(type) {
 		case error:
 			// Otherwise errors are ignored by `encoding/json`
 			// https://github.com/Sirupsen/logrus/issues/137
-			data[k] = v.Error()
+			meta[k] = v.Error()
 		default:
-			data[k] = v
+			meta[k] = v
 		}
 	}
 
@@ -76,7 +76,7 @@ func (hook *LogglyHook) Fire(entry *logrus.Entry) error {
 		"timestamp": entry.Time.UTC().Format(RFC3339Micro),
 		"level":     level,
 		"message":   entry.Message,
-		"meta":      data,
+		"meta":      meta,
 	}
 
 	err := hook.client.Send(logglyMessage)
