@@ -76,10 +76,9 @@ func (hook *LogglyHook) Fire(entry *logrus.Entry) error {
 
 	logglyMessage := loggly.Message{
 		"timestamp": entry.Time.UTC().Format(RFC3339Micro),
-		"level":     strings.ToUpper(level),
+		"level":     level,
 		"message":   entry.Message,
-		"host":      hook.host,
-		"data":      data,
+		"meta":      data,
 	}
 
 	err := hook.client.Send(logglyMessage)
